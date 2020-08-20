@@ -25,7 +25,8 @@ namespace AnalizaImagen.Controllers
             string urlImagen = numMedia > 0 ? Request.Form[$"MediaUrl0"] : "";
             if (urlImagen == "")
             {
-                respuesta = "Por favor envía una imagen para analizar. 🤖👀";
+                respuesta = "Por favor envía una imagen para analizar. 🤖👀 \n\n" +
+                    " Es importante que la mandes para poder analizarla. Recuerda que deben aparecer personas.";
             }
             else
             {
