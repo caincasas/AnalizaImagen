@@ -25,6 +25,7 @@ namespace AnalizaImagen.Controllers
             string respuesta = "";
             var response = new MessagingResponse();
             string urlImagen = numMedia > 0 ? Request.Form[$"MediaUrl0"] : "";
+            //string urlImagen = "https://s3-external-1.amazonaws.com/media.twiliocdn.com/AC9c228a616df6053dd6bed4ad89d96984/ae309603d459fa71aff36a11b726b061";
             if (urlImagen == "")
             {
                 respuesta = "Por favor envía una imagen para analizar. 🤖👀 \n\n" +
@@ -55,10 +56,42 @@ namespace AnalizaImagen.Controllers
                     //respuesta = "datos <" + dd + ">";
                     if (data != "{}")
                     {
-                        string edad = jsonObj.outputs[0].data.regions[0].data.concepts[0].name.ToString();
-                        double edadPorcent = Convert.ToDouble(jsonObj.outputs[0].data.regions[0].data.concepts[0].value.ToString()) * 100;
-                        edadPorcent = Math.Truncate(edadPorcent * 100) / 100;
-                        respuesta = $"Resultados: \n\nEdad: *{edad}* \nExactitud: *{edadPorcent}%*";
+                        string edad = "";
+                        double edadPorcent = 0;
+                        //string edad = jsonObj.outputs[0].data.regions[0].data.concepts[0].name.ToString();
+                        //double edadPorcent = Convert.ToDouble(jsonObj.outputs[0].data.regions[0].data.concepts[0].value.ToString()) * 100;
+                        //edadPorcent = Math.Truncate(edadPorcent * 100) / 100;
+                        //respuesta = $"Resultados: \n\nEdad: *{edad}* \nExactitud: *{edadPorcent}%*";
+                        int elementos = jsonObj.outputs[0].data.regions[0].data.concepts.Count;
+                        string cultura = "";
+                        double culturaPorcet = 0;
+                        for (int i = 0; i < elementos; i++)
+                        {
+                            if(jsonObj.outputs[0].data.regions[0].data.concepts[i].vocab_id.ToString() == "age_appearance")//verifico apariencia de edad
+                            {
+                                double actualPorcent = Convert.ToDouble(jsonObj.outputs[0].data.regions[0].data.concepts[i].value.ToString());
+                                //edadPorcent = edadPorcent > actualPorcent ? edadPorcent : actualPorcent;
+                                if(edadPorcent < actualPorcent)
+                                {
+                                    edadPorcent = actualPorcent;
+                                    edad = jsonObj.outputs[0].data.regions[0].data.concepts[i].name.ToString();
+                                }
+                            }
+                            else if (jsonObj.outputs[0].data.regions[0].data.concepts[i].vocab_id.ToString() == "multicultural_appearance")//verifico cultura
+                            {
+                                double actualPorcent = Convert.ToDouble(jsonObj.outputs[0].data.regions[0].data.concepts[i].value.ToString());
+                                if (culturaPorcet < actualPorcent)
+                                {
+                                    culturaPorcet = actualPorcent;
+                                    cultura = jsonObj.outputs[0].data.regions[0].data.concepts[i].name.ToString();
+                                }
+                            }
+                        }
+                        edadPorcent = Math.Truncate((edadPorcent*100) * 100) / 100;//Se redondea con 2 dijitos
+                        culturaPorcet = Math.Truncate((culturaPorcet*100) * 100) / 100;//Se redondea con 2 dijitos
+
+                        respuesta = $"Resultados: \n\nEdad: *{edad}* \nExactitud: *{edadPorcent}%* \n\nCultura: *{cultura}* \nExactitud: *{culturaPorcet}%*";
+                        //respuesta = "Total de elementos: *" + elementos + "*";
                     }
                     else
                     {
