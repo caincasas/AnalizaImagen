@@ -86,3 +86,4 @@ C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Debug\AnalizaImagen
 C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Debug\AnalizaImagen.csproj.CopyComplete
 C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Debug\AnalizaImagen.dll
 C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Debug\AnalizaImagen.pdb
+C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Debug\AnalizaImagen.sourcelink.json

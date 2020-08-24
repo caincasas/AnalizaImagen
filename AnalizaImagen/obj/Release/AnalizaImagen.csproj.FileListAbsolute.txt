@@ -85,3 +85,5 @@ C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\bin\es\System.Web.Mvc.r
 C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Release\AnalizaImagen.csproj.CopyComplete
 C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Release\AnalizaImagen.dll
 C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Release\AnalizaImagen.pdb
+C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Release\AnalizaImagen.sourcelink.json
+C:\Users\ccasas\source\repos\AnalizaImagen\AnalizaImagen\obj\Release\AnalizaImagen.csprojAssemblyReference.cache

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -31,20 +32,44 @@ namespace AnalizaImagen.Controllers
             }
             else
             {
+                //respuesta = "Url de imagen: \n" + urlImagen;
                 string URL = "https://api.clarifai.com/v2/models/c0c0ac362b03416da06ab3fa36fb58e3/outputs";
                 string DATA = "{" +
                         @"   ""inputs"": [" +
                         @" 	{" +
                         @" 	  ""data"": {" +
                         @" 		""image"": {" +
-                        @" 		  ""url"": ""https://s3-external-1.amazonaws.com/media.twiliocdn.com/AC9c228a616df6053dd6bed4ad89d96984/ae309603d459fa71aff36a11b726b061"" " +
+                        @" 		  ""url"": """ + urlImagen + @""" " +
                         " 		}" +
                         " 	  }" +
                         " 	}" +
                         "   ]" +
                         " }";
                 string r = api(URL, DATA);
-                respuesta = "Url de imagen: \n" + urlImagen;
+                dynamic jsonObj = JsonConvert.DeserializeObject(r, typeof(object));
+                string status = jsonObj.status.description.ToString();//estatus del api
+                if(status == "Ok")
+                {
+                    string data = jsonObj.outputs[0].data.ToString();
+                    //string dd = data.Length >= 600 ? data.Remove(600) : data;
+                    //respuesta = "datos <" + dd + ">";
+                    if (data != "{}")
+                    {
+                        string edad = jsonObj.outputs[0].data.regions[0].data.concepts[0].name.ToString();
+                        double edadPorcent = Convert.ToDouble(jsonObj.outputs[0].data.regions[0].data.concepts[0].value.ToString()) * 100;
+                        edadPorcent = Math.Truncate(edadPorcent * 100) / 100;
+                        respuesta = $"Resultados: \n\nEdad: *{edad}* \nExactitud: *{edadPorcent}%*";
+                    }
+                    else
+                    {
+                        respuesta = "No encontre personas en la imagen 😓😭😪";
+                    }
+                }
+                else
+                {
+                    respuesta = "Lo siento ocurrio un error al ejecutar el API.";
+                }
+                //respuesta = status.Length >= 600 ? status.Remove(600) : status;
             }
             response.Message(respuesta);
             return TwiML(response);
@@ -80,10 +105,15 @@ namespace AnalizaImagen.Controllers
             }
             catch (Exception e)
             {
-                Console.Out.WriteLine("-----------------");
-                Console.Out.WriteLine(e.Message);
+                //Console.Out.WriteLine("-----------------");
+                //Console.Out.WriteLine(e.Message);
+                re = e.Message;
             }
             return re;
+        }
+        public void log()
+        {
+
         }
     }
 }
