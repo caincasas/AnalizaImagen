@@ -25,7 +25,6 @@ namespace AnalizaImagen.Controllers
             string respuesta = "";
             var response = new MessagingResponse();
             string urlImagen = numMedia > 0 ? Request.Form[$"MediaUrl0"] : "";
-            //string urlImagen = "https://s3-external-1.amazonaws.com/media.twiliocdn.com/AC9c228a616df6053dd6bed4ad89d96984/ae309603d459fa71aff36a11b726b061";
             if (urlImagen == "")
             {
                 respuesta = "Por favor envía una imagen para analizar. 🤖👀 \n\n" +
