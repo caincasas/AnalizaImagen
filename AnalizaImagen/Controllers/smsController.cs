@@ -64,6 +64,8 @@ namespace AnalizaImagen.Controllers
                         int elementos = jsonObj.outputs[0].data.regions[0].data.concepts.Count;
                         string cultura = "";
                         double culturaPorcet = 0;
+                        string sexo = "";
+                        double sexoPorcet = 0;
                         for (int i = 0; i < elementos; i++)
                         {
                             if(jsonObj.outputs[0].data.regions[0].data.concepts[i].vocab_id.ToString() == "age_appearance")//verifico apariencia de edad
@@ -74,6 +76,15 @@ namespace AnalizaImagen.Controllers
                                 {
                                     edadPorcent = actualPorcent;
                                     edad = jsonObj.outputs[0].data.regions[0].data.concepts[i].name.ToString();
+                                }
+                            }
+                            else if (jsonObj.outputs[0].data.regions[0].data.concepts[i].vocab_id.ToString() == "gender_appearance")//verifico sexo
+                            {
+                                double actualPorcent = Convert.ToDouble(jsonObj.outputs[0].data.regions[0].data.concepts[i].value.ToString());
+                                if (sexoPorcet < actualPorcent)
+                                {
+                                    sexoPorcet = actualPorcent;
+                                    sexo = jsonObj.outputs[0].data.regions[0].data.concepts[i].name.ToString();
                                 }
                             }
                             else if (jsonObj.outputs[0].data.regions[0].data.concepts[i].vocab_id.ToString() == "multicultural_appearance")//verifico cultura
@@ -88,8 +99,9 @@ namespace AnalizaImagen.Controllers
                         }
                         edadPorcent = Math.Truncate((edadPorcent*100) * 100) / 100;//Se redondea con 2 dijitos
                         culturaPorcet = Math.Truncate((culturaPorcet*100) * 100) / 100;//Se redondea con 2 dijitos
+                        sexoPorcet = Math.Truncate((sexoPorcet * 100) * 100) / 100;
 
-                        respuesta = $"Resultados: \n\nEdad: *{edad}* \nExactitud: *{edadPorcent}%* \n\nCultura: *{cultura}* \nExactitud: *{culturaPorcet}%*";
+                        respuesta = $"Resultados: \n\nEdad: *{edad}* \nExactitud: *{edadPorcent}%* \n\nCultura: *{cultura}* \nExactitud: *{culturaPorcet}%* \n\nSexo: {sexo} \nExactitud: {sexoPorcet}";
                         //respuesta = "Total de elementos: *" + elementos + "*";
                     }
                     else
